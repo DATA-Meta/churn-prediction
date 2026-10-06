@@ -1,40 +1,22 @@
-# Netflix Churn Prediction - Project 1
+# Netflix Churn Prediction - Project Summary (v2)
 
-## Overview
-This is a machine learning project to predict customer churn for a Netflix-like streaming service.
+Dataset: 25,000 synthetic streaming customers (Mar 2024 - Mar 2025), simulated churn label (45% churn)
+Best model: XGBoost (class-weighted), threshold tuned to 0.35
+Test set: ROC-AUC 0.686 | PR-AUC 0.634 | F1 0.647 | Recall 0.867 | Precision 0.516
+Baseline (majority class): ROC-AUC 0.500 | F1 0.000
 
-## Dataset
-- 25,000 customers
-- Features Age, Country, Subscription Type, Watch Time, etc.
-- Time Period March 2024 - March 2025
-- Target Churn (45% churned, 55% active)
+Key drivers (permutation importance):
+1. Subscription plan - Basic 62% churn, Standard 45%, Premium 29%
+2. Watch time - light viewers (0-200h) 55% churn, heavy viewers (800h+) 28%
+3. Favourite genre - Sci-Fi/Drama fans churn least (~37-39%)
+Age and country have little effect.
 
-## Model Performance
-- Algorithm Gradient Boosting Classifier
-- Accuracy 64.46%
-- Precision 61.56%
-- Recall 56.52%
-- F1-Score 58.93%
+Recommendations:
+1. Upgrade offers for Basic-plan customers
+2. Re-engage light viewers with personalised recommendations
+3. Review content for higher-churn genres
 
-## Key Findings
-1. Subscription Type is the strongest predictor (52.5% importance)
-   - Premium 29% churn (best retention)
-   - Standard 46% churn
-   - Basic 61% churn (highest risk)
+v1 lesson: the original label (500+ days since last login) depended only on login date;
+features had no signal (ROC-AUC 0.50) and the model predicted everyone as churned.
 
-2. Watch Time Hours is very important (36.6% importance)
-   - Heavy users (600h) 61% churn
-   - Light users (100h) 37% churn
-
-## Business Recommendations
-1. Upgrade Basic users to Premium (reduce churn by 50%)
-2. Monitor heavy watchers with new content
-3. Send personalized recommendations to light users
-
-## Files
-- `datarawnetflix_data_realistic_churn.csv` - Dataset
-- `modelschurn_model.pkl` - Trained model
-- `notebooks01_netflix_churn_analysis.ipynb` - Full analysis notebook
-
-## Status
-✅ Project Complete - Ready for deployment
+Files: notebooks/02_churn_modeling.ipynb, models/churn_model.joblib, reports/test_metrics.csv
